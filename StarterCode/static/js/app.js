@@ -111,6 +111,19 @@ function plotBuild(id) {
     });
 }
 
+function init(){
+    //read your data
+    d3.json.("/samples.json").then((data)=> {
+        //retrieve id for the drop down menu
+        data.names.forEach((name)=> {
+            d3.select("#selDataset")
+            .append("option")
+            .text(name)
+            .property("value");
+        });
+    });
+}
+init();
 
 
 //Need to make init function for the drop down menu//
