@@ -71,17 +71,44 @@ function plotBuild(id) {
             },
             text: samples.otu_labels
         };
-
+        //setting the layout for the bubble chart
         var layout_bub = {
             xaxis:{title: "OTU ID"},
             height: 600,
             width: 1200,
         };
-
+        // bubble data variable    
         var data_bub = [trace_bub];
-
+        // plotting the bubble chart
         Plotly.newPlot("bubble", data1, layout_bub);
-    })
+
+        // creating the gauge chart
+        var data_gauge = [
+            {
+            domain: {x:[0,1], y:[0,1]},
+            value: wfreq
+            title: {text: "Washing Frequency"},
+            type: "indicator",
+
+            mode: "guage+number",
+            gauge: {axis: { range: [null, 9]},
+                    steps: [
+                        {range: [0, 1], color: "white"},
+                        {range: [1, 2], color: "white"},
+                        {range: [2, 3], color: "white"},
+                        {range: [3, 4], color: "white"},
+                    ]}
+            }
+        ];
+        //setting the layout for the bubble chart
+        var layout_gauge = {
+            width: 700,
+            height: 600,
+            margin {t: 20, b: 40, 1:100, r:100}
+        };
+        //plotting the bubble chart
+        Plotly.newPlot("gauge", data_gauge, layout_gauge);
+    });
 }
 
 
