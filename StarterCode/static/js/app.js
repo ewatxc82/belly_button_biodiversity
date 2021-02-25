@@ -1,10 +1,10 @@
-function readSamples(id)=> {
-    d3.json("samples.json").then((data)=> {
-        var bellydata = data.metadata;
-        console.log(bellydata);
+function readSamples(id){
+    d3.json("/samples.json").then((data)=> {
+        var metadata = data.metadata;
+        console.log(metadata);
         
         //filtering the belly data by each unique id//
-        var filterData = metadata.filter(bdata => bdata.id.tostring() === id) [0];
+        var filterData = metadata.filter(info => info.id.tostring() === id) [0];
         
         var panelBody = d3.select("#sample-metadata");
         
@@ -31,16 +31,56 @@ function plotBuild(id) {
         console.log("Samples:" + samples)
 
         //find the top 10 samples 
-        var tTen = samples.sample_values.slice(0, 10).reverse();
+        var sampleValues = samples.sample_values.slice(0, 10).reverse();
         console.log("a top 10 sample:" + tTen);
 
         //find tope 10 otu id for otu plot
-        var otuId = (samples.otu_ids.slice(0, 10).reverse();
+        var OTU = (samples.otu_ids.slice(0, 10)).reverse();
         
         //map the otu ids to make the plot
-        var outIdmap = otuId.map(d => "otu " + d)
+        var OTU_id = OTU.map(d => "OTU " + d)
         console.log("otu id's: " + outIdmap);
-        
+
+        //find the top 10 labels for the plot
+        var t10labels = samples.otu_lables.slice(0, 10).reverse();
+        console.log("labels: " + t10labels);
+
+        //make the trace for the plot
+        var trace = {
+            x: sampleValues,
+            y: OTU_id,
+            text: t10labels,
+            type: "bar",
+            oreintation: "h",
+        };
+
+        //make your data variable
+        var data = [trace]
+
+        //make bar plot
+        Plotly.newPlot("bar", data);
+
+        //make bubble chart
+        var trace_bub = {
+            x: samples.otu_ids,
+            y: samples.sample_values,
+            mode: "markers",
+            marker: {
+                size: samples.sample_values,
+                color: samples.otu_ids
+            },
+            text: samples.otu_labels
+        };
+
+        var layout_bub = {
+            xaxis:{title: "OTU ID"},
+            height: 600,
+            width: 1200,
+        };
+
+        var data_bub = [trace_bub];
+
+        Plotly.newPlot("bubble", data1, layout_bub);
     })
 }
 
