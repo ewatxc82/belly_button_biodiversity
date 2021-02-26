@@ -4,7 +4,7 @@ function readSamples(id){
         console.log(metadata);
         
         //filtering the belly data by each unique id//
-        var filterData = metadata.filter(info => info.id.toString() === id)[0];
+        var filterData = metadata.filter(info => info.id.tostring() === id) [0];
         
         var panelBody = d3.select("#sample-metadata");
         
@@ -20,7 +20,7 @@ function readSamples(id){
 // Creating function for plotly plots
 function plotBuild(id) {
     //retrieve data from the json file
-    d3.json("samples.json").then((data)=> {
+    d3.json("samples.json").then( (data)=> {
         //filter the washing frequency by each id
         var wfreq = data.metadata.filter(f => f.id.toString() === id)[0];
         wfreq = wfreq.wfreq;
@@ -100,13 +100,24 @@ function plotBuild(id) {
                     ]}
             }
         ];
-        //setting the layout for the bubble chart
-        var layout_gauge = {
-            width: 700,
-            height: 600,
-            margin: {t: 20, b:40, 1:100, r:100}
-        };
-        //plotting the bubble chart
-        Plotly.newPlot("gauge", data_gauge, layout_gauge);
     });
+}
+function init() {
+    d3.json("samples.json").then((data)=> {
+
+        data.names.forEach((name) => {
+            d3.select("#selDataset")
+            .append("option")
+            .text(name)
+            .property("value");
+        });
+        plots(data.names[0]);
+        readSamples(data.names[0]);
+    });
+};
+init();
+
+function optionChanged(id){
+    plots(id);
+    readSamples(id);
 }
